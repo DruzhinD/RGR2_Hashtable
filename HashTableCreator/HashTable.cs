@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace HashTableCreator
 {
     internal class HashTable
     {
         /// <summary>Представляет собой хеш-таблицу</summary>
-        public Record[] Table { get; }
+        public Record[] Table { get => table; }
 
         private Record[] table;
 
         /// <summary>Значение ключа в хеш-таблице</summary>
+        [Serializable]
         internal class Record
         {
             public string key;
@@ -45,8 +44,6 @@ namespace HashTableCreator
             this.table = new Record[59];
         }
 
-        //Default - Default норм работает
-        //13 - \r   10 - \n     7C (124) - |    44 - ,      65279 - нулевой ширины неразрывный пробел (начало файла)
         /// <summary>
         /// Индексирование записей, путем поиска порядкового номера первого символа в каждой записи
         /// </summary>
@@ -89,22 +86,11 @@ namespace HashTableCreator
             if (file.ReadByte() == -1)
                 indexesOfLines.RemoveAt(indexesOfLines.Count - 1);
 
-            /*#region проверка на соответствие. (Работает корректно)
-            foreach (int pos in indexesOfLines)
-            {
-                file.Seek(pos, SeekOrigin.Begin);
-                var c = file.ReadByte();
-                byte[] chars = new byte[1];
-                chars[0] = (byte)c;
-                string symb = Encoding.Default.GetString(chars);
-                Console.WriteLine($"Позиция: {pos}  первый символ {symb}");
-            }
-            #endregion*/
-
             file.Close();
         }
 
         //хранит индексы начала строк
+        [NonSerialized]
         private List<int> indexesOfLines;
 
         /// <summary>
@@ -194,6 +180,22 @@ namespace HashTableCreator
                 //в случае не выполнения условий, двигаемся с шагом
                 collision += 4;
             }
+        }
+
+        public void Serialize(string path)
+        {
+            FileStream binaryFile = new FileStream(path, FileMode.OpenOrCreate);
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(binaryFile, table); //сериализуем хеш-таблицу
+            binaryFile.Close();
+        }
+
+        public void Deserialize(string path)
+        {
+            FileStream binaryFile = new FileStream(path, FileMode.Open);
+            BinaryFormatter bf = new BinaryFormatter();
+            table = (Record[])bf.Deserialize(binaryFile);
+            binaryFile.Close();
         }
     }
 }
