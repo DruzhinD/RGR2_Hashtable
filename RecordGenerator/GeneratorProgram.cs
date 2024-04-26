@@ -45,7 +45,7 @@ namespace RecordGenerator
             //записываем информацию в файл в кодировке unicode
             StreamWriter writer = new StreamWriter(path + "Records.txt", false, Encoding.Default);
 
-            int amountOfLines = 1000;
+            int amountOfLines = 2;
             for (int i = 0; i < amountOfLines; i++)
             {
                 //генерируем списки описания и достопримечательностей

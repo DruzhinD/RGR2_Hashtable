@@ -27,7 +27,7 @@ namespace RecordGenerator
         public string ToCsvFormat(string del = "|")
         {
             string str = $"{city}{del}{country}{del}{yearOfFoundation}{del}" +
-                $"{string.Join(" ", description)}{del}{string.Join(", ", attractions)}";
+                $"{string.Join(" ", description)}{del}{string.Join(",", attractions)}";
             return str;
         }
     }

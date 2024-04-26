@@ -13,8 +13,11 @@ namespace HashTableCreator
         static void Main(string[] args)
         {
             string path = Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\");
-            FileStream file = new FileStream(path + "Records.txt", FileMode.Open);
+            //FileStream file = new FileStream(path + "Records.txt", FileMode.Open);
             //GetStartPosition(path + "Records.txt", out List<int> positions);
+            HashTable hashTable = new HashTable();
+            //hashTable.IndexRecords(path + @"\Records.txt");
+            hashTable.CreateHashTable(path + @"\Records.txt");
         }
 
         
