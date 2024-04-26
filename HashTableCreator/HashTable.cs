@@ -6,7 +6,7 @@ using System.Text;
 
 namespace HashTableCreator
 {
-    internal class HashTable
+    public class HashTable
     {
         /// <summary>Представляет собой хеш-таблицу</summary>
         public Record[] Table { get => table; }
@@ -15,14 +15,14 @@ namespace HashTableCreator
 
         /// <summary>Значение ключа в хеш-таблице</summary>
         [Serializable]
-        internal class Record
+        public class Record
         {
             public string key;
             /// <summary>true - элемент в наличие, false - запись пуста</summary>
-            internal bool isExist;
+            public bool isExist;
 
             //не доступен для замены ссылки
-            internal readonly List<int> indexes;
+            public readonly List<int> indexes;
 
             internal Record(string key, bool existing, int lineIndex = -1)
             {
