@@ -55,11 +55,14 @@ namespace SearchRecordsApp
                 listIndexOfRecord.Items.Add(index);
                 return;
             }
+            //количество записей, в которых встречается введенное слово
+            int recordCount = hashTable.Table[index].indexes.Count;
             //позиции символов, с которых начинаются записи
-            string[] recordsId = new string[hashTable.Table[index].indexes.Count];
+            string[] recordsId = new string[recordCount];
             for (int i = 0; i < recordsId.Length;i++)
                 recordsId[i] = hashTable.Table[index].indexes[i].ToString();
             listIndexOfRecord.Items.AddRange(recordsId);
+            textRecordCount.Text = string.Format("{0:N0}", recordCount);
         }
 
         private void buttonOutput_Click(object sender, EventArgs e)

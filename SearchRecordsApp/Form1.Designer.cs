@@ -39,6 +39,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textConcreteRecord = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textRecordCount = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // listField
@@ -57,7 +59,7 @@
             this.buttonSearch.Font = new System.Drawing.Font("Calibri", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonSearch.Location = new System.Drawing.Point(232, 56);
             this.buttonSearch.Name = "buttonSearch";
-            this.buttonSearch.Size = new System.Drawing.Size(210, 30);
+            this.buttonSearch.Size = new System.Drawing.Size(202, 30);
             this.buttonSearch.TabIndex = 1;
             this.buttonSearch.Text = "Найти";
             this.buttonSearch.UseVisualStyleBackColor = false;
@@ -68,7 +70,7 @@
             this.textSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textSearch.Location = new System.Drawing.Point(232, 30);
             this.textSearch.Name = "textSearch";
-            this.textSearch.Size = new System.Drawing.Size(210, 23);
+            this.textSearch.Size = new System.Drawing.Size(202, 23);
             this.textSearch.TabIndex = 2;
             // 
             // label1
@@ -89,16 +91,16 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label2.Location = new System.Drawing.Point(232, 99);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(211, 19);
+            this.label2.Size = new System.Drawing.Size(202, 19);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Запись встречается в записях";
+            this.label2.Text = "слово встречается в записях";
             // 
             // listIndexOfRecord
             // 
             this.listIndexOfRecord.FormattingEnabled = true;
             this.listIndexOfRecord.Location = new System.Drawing.Point(232, 122);
             this.listIndexOfRecord.Name = "listIndexOfRecord";
-            this.listIndexOfRecord.Size = new System.Drawing.Size(210, 303);
+            this.listIndexOfRecord.Size = new System.Drawing.Size(202, 225);
             this.listIndexOfRecord.TabIndex = 5;
             // 
             // textOutput
@@ -148,16 +150,38 @@
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label4.Location = new System.Drawing.Point(232, 10);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(211, 19);
+            this.label4.Size = new System.Drawing.Size(202, 19);
             this.label4.TabIndex = 10;
             this.label4.Text = "Введите значение";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label5
+            // 
+            this.label5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(232, 361);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(202, 19);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "найдено совпадений";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // textRecordCount
+            // 
+            this.textRecordCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textRecordCount.Location = new System.Drawing.Point(232, 383);
+            this.textRecordCount.Name = "textRecordCount";
+            this.textRecordCount.ReadOnly = true;
+            this.textRecordCount.Size = new System.Drawing.Size(202, 23);
+            this.textRecordCount.TabIndex = 12;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.textRecordCount);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textConcreteRecord);
             this.Controls.Add(this.label3);
@@ -189,6 +213,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textConcreteRecord;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textRecordCount;
     }
 }
 

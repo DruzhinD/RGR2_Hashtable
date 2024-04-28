@@ -149,7 +149,7 @@ namespace HashTableCreator
             file.Close();
         }
 
-        private char[] chars = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя".ToCharArray();
+        private char[] chars = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя ".ToCharArray();
 
         //добавляем новый ключ в хеш-таблицу
         private void KeyHashTable(string key, int lineIndex)
