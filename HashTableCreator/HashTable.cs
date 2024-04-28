@@ -156,7 +156,7 @@ namespace HashTableCreator
         {
             int recordPos = 0;
             foreach (char c in key)
-                recordPos = Array.IndexOf(chars, c); //получаем сумму индексов символов
+                recordPos += Array.IndexOf(chars, c); //получаем сумму индексов символов
 
             //шаг, необходимый в случае коллизий
             int collision = 0;
