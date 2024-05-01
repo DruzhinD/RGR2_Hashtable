@@ -52,6 +52,7 @@
             this.listField.Name = "listField";
             this.listField.Size = new System.Drawing.Size(198, 395);
             this.listField.TabIndex = 0;
+            this.listField.SelectedIndexChanged += new System.EventHandler(this.listField_SelectedIndexChanged);
             // 
             // buttonSearch
             // 
@@ -102,11 +103,12 @@
             this.listIndexOfRecord.Name = "listIndexOfRecord";
             this.listIndexOfRecord.Size = new System.Drawing.Size(202, 225);
             this.listIndexOfRecord.TabIndex = 5;
+            this.listIndexOfRecord.SelectedIndexChanged += new System.EventHandler(this.listIndexOfRecord_SelectedIndexChanged);
             // 
             // textOutput
             // 
             this.textOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textOutput.Location = new System.Drawing.Point(480, 30);
+            this.textOutput.Location = new System.Drawing.Point(513, 30);
             this.textOutput.Name = "textOutput";
             this.textOutput.Size = new System.Drawing.Size(245, 23);
             this.textOutput.TabIndex = 6;
@@ -115,7 +117,7 @@
             // 
             this.buttonOutput.BackColor = System.Drawing.Color.LightSalmon;
             this.buttonOutput.Font = new System.Drawing.Font("Calibri", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonOutput.Location = new System.Drawing.Point(480, 59);
+            this.buttonOutput.Location = new System.Drawing.Point(513, 56);
             this.buttonOutput.Name = "buttonOutput";
             this.buttonOutput.Size = new System.Drawing.Size(245, 30);
             this.buttonOutput.TabIndex = 7;
@@ -128,7 +130,7 @@
             this.label3.AutoSize = true;
             this.label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(480, 8);
+            this.label3.Location = new System.Drawing.Point(513, 8);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(245, 19);
             this.label3.TabIndex = 8;
@@ -136,12 +138,12 @@
             // 
             // textConcreteRecord
             // 
-            this.textConcreteRecord.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textConcreteRecord.Location = new System.Drawing.Point(480, 99);
+            this.textConcreteRecord.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textConcreteRecord.Location = new System.Drawing.Point(450, 99);
             this.textConcreteRecord.Multiline = true;
             this.textConcreteRecord.Name = "textConcreteRecord";
             this.textConcreteRecord.ReadOnly = true;
-            this.textConcreteRecord.Size = new System.Drawing.Size(245, 326);
+            this.textConcreteRecord.Size = new System.Drawing.Size(338, 326);
             this.textConcreteRecord.TabIndex = 9;
             // 
             // label4

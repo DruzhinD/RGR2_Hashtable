@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,22 +21,15 @@ namespace SearchRecordsApp
         {
             InitializeComponent();
 
-            FillListWithValues(directory + @"cities_info.txt");
             hashTable.Deserialize(directory + @"Records.dat");
+            FillListWithValues();
         }
 
         //вывод списка доступных значений для поиска
-        void FillListWithValues(string path)
+        void FillListWithValues()
         {
-            StreamReader stream = new StreamReader(path, Encoding.Default);
-            //считываем первые 4 неинтересующие строки
-            for (int i = 0; i < 4; i++)
-                stream.ReadLine();
-
-            string[] items = stream.ReadLine().Split('|');
+            var items = hashTable.Keys;
             listField.Items.AddRange(items);
-
-            stream.Close();
         }
 
         private void buttonSearch_Click(object sender, EventArgs e)
@@ -44,25 +38,22 @@ namespace SearchRecordsApp
             listIndexOfRecord.Items.Clear();
 
             //получаем индекс элемента в хеш-таблице
-            int index = Array.FindIndex(hashTable.Table, x => {
-                if (x == null)
-                    return false;
-                return x.key == textSearch.Text;
-            });
-
-            if (index == -1)
+            if (hashTable.ElementAtKey(textSearch.Text, out List<int> indexes))
             {
-                listIndexOfRecord.Items.Add(index);
-                return;
+                //заполнение списка, который выводит список индексов
+                string[] array = new string[indexes.Count];
+                for (int i = 0; i < indexes.Count; i++)
+                    array[i] = indexes[i].ToString();
+                listIndexOfRecord.Items.AddRange(array);
+
+                //вывод информации по количеству элементов
+                textRecordCount.Text = string.Format("{0:N0}", indexes.Count);
             }
-            //количество записей, в которых встречается введенное слово
-            int recordCount = hashTable.Table[index].indexes.Count;
-            //позиции символов, с которых начинаются записи
-            string[] recordsId = new string[recordCount];
-            for (int i = 0; i < recordsId.Length;i++)
-                recordsId[i] = hashTable.Table[index].indexes[i].ToString();
-            listIndexOfRecord.Items.AddRange(recordsId);
-            textRecordCount.Text = string.Format("{0:N0}", recordCount);
+            //если не удалось найти информацию по ключу в хеш-таблице
+            else
+            {
+                listIndexOfRecord.Items.Add(-1);
+            }
         }
 
         private void buttonOutput_Click(object sender, EventArgs e)
@@ -74,21 +65,27 @@ namespace SearchRecordsApp
                 return;
             }
 
-            FileStream file = new FileStream(directory + @"Records.txt", FileMode.Open);
-
-            //чтение конкретной записи из файла
-            file.Seek(recordId, SeekOrigin.Begin);
-            byte[] array = new byte[512];
-            file.Read(array, 0, array.Length);
-
-            //ищем индекс первого вхождения \r
-            int rPos = Array.IndexOf(array, (byte)'\r');
-            //декодированная запись
-            string record = Encoding.Default.GetString(array, 0, rPos);
-
-            textConcreteRecord.Text = record;
-
+            StreamReader file = new StreamReader(directory + @"Records.txt", Encoding.Default);
+            file.BaseStream.Seek(recordId, SeekOrigin.Begin);
+            string record = file.ReadLine();
             file.Close();
+
+            string[] splittedRecord = record.Split('|');
+            textConcreteRecord.Lines = splittedRecord;
+
+            //textConcreteRecord.Text = record;
+            
+
+        }
+
+        private void listIndexOfRecord_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textOutput.Text = ((ListBox)sender).SelectedItem.ToString();
+        }
+
+        private void listField_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textSearch.Text = ((ListBox)sender).SelectedItem.ToString();
         }
     }
 }
