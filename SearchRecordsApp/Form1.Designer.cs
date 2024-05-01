@@ -41,6 +41,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.textRecordCount = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textTime = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // listField
@@ -108,7 +110,7 @@
             // textOutput
             // 
             this.textOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textOutput.Location = new System.Drawing.Point(513, 30);
+            this.textOutput.Location = new System.Drawing.Point(493, 30);
             this.textOutput.Name = "textOutput";
             this.textOutput.Size = new System.Drawing.Size(245, 23);
             this.textOutput.TabIndex = 6;
@@ -117,7 +119,7 @@
             // 
             this.buttonOutput.BackColor = System.Drawing.Color.LightSalmon;
             this.buttonOutput.Font = new System.Drawing.Font("Calibri", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonOutput.Location = new System.Drawing.Point(513, 56);
+            this.buttonOutput.Location = new System.Drawing.Point(493, 56);
             this.buttonOutput.Name = "buttonOutput";
             this.buttonOutput.Size = new System.Drawing.Size(245, 30);
             this.buttonOutput.TabIndex = 7;
@@ -130,7 +132,7 @@
             this.label3.AutoSize = true;
             this.label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(513, 8);
+            this.label3.Location = new System.Drawing.Point(493, 8);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(245, 19);
             this.label3.TabIndex = 8;
@@ -177,11 +179,33 @@
             this.textRecordCount.Size = new System.Drawing.Size(202, 23);
             this.textRecordCount.TabIndex = 12;
             // 
+            // label6
+            // 
+            this.label6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.Location = new System.Drawing.Point(232, 442);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(267, 19);
+            this.label6.TabIndex = 13;
+            this.label6.Text = "Длительность последней операции";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // textTime
+            // 
+            this.textTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textTime.Location = new System.Drawing.Point(232, 464);
+            this.textTime.Name = "textTime";
+            this.textTime.ReadOnly = true;
+            this.textTime.Size = new System.Drawing.Size(267, 23);
+            this.textTime.TabIndex = 14;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(836, 518);
+            this.Controls.Add(this.textTime);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.textRecordCount);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -217,6 +241,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textRecordCount;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox textTime;
     }
 }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -34,6 +35,8 @@ namespace SearchRecordsApp
 
         private void buttonSearch_Click(object sender, EventArgs e)
         {
+            Stopwatch sw = Stopwatch.StartNew();
+
             //очистка списка
             listIndexOfRecord.Items.Clear();
 
@@ -54,10 +57,15 @@ namespace SearchRecordsApp
             {
                 listIndexOfRecord.Items.Add(-1);
             }
+
+            sw.Stop();
+            textTime.Text = $"{sw.Elapsed.TotalMilliseconds:N5} мс";
         }
 
         private void buttonOutput_Click(object sender, EventArgs e)
         {
+            Stopwatch sw = Stopwatch.StartNew();
+
             int recordId;
             if (!int.TryParse(textOutput.Text, out recordId) || recordId < 0)
             {
@@ -73,9 +81,8 @@ namespace SearchRecordsApp
             string[] splittedRecord = record.Split('|');
             textConcreteRecord.Lines = splittedRecord;
 
-            //textConcreteRecord.Text = record;
-            
-
+            sw.Stop();
+            textTime.Text = $"{sw.Elapsed.TotalMilliseconds:N5} мс";
         }
 
         private void listIndexOfRecord_SelectedIndexChanged(object sender, EventArgs e)
