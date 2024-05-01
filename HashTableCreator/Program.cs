@@ -14,21 +14,23 @@ namespace HashTableCreator
         static void Main(string[] args)
         {
             string path = Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\");
+            #region проверка работы программы
             HashTable hashTable = new HashTable();
             Stopwatch sw = Stopwatch.StartNew();
-            hashTable.CreateHashTable(path + @"Records.txt");
-            sw.Stop();
-            Console.WriteLine($"Генерация хеш-таблицы заняла: {sw.Elapsed.TotalMilliseconds}мс");
-            sw.Restart();
-            hashTable.Serialize(path + @"Records.dat");
-            sw.Stop();
-            Console.WriteLine($"Сериализация хеш-таблицы заняла: {sw.Elapsed.TotalMilliseconds}мс");
+            //hashTable.CreateHashTable(path + @"Records.txt");
+            //sw.Stop();
+            //Console.WriteLine($"Генерация хеш-таблицы заняла: {sw.Elapsed.TotalMilliseconds}мс");
+            //sw.Restart();
+            //hashTable.Serialize(path + @"Records.dat");
+            //sw.Stop();
+            //Console.WriteLine($"Сериализация хеш-таблицы заняла: {sw.Elapsed.TotalMilliseconds}мс");
             HashTable hash = new HashTable();
             sw.Restart();
             hash.Deserialize(path + @"Records.dat");
             sw.Stop();
             Console.WriteLine($"Десериализация хеш-таблицы заняла: {sw.Elapsed.TotalMilliseconds}мс");
-            var table = hash.Table;
+            #endregion
+
         }
     }
 }

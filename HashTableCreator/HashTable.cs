@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
@@ -8,26 +10,50 @@ namespace HashTableCreator
 {
     public class HashTable
     {
-        /// <summary>Представляет собой хеш-таблицу</summary>
-        public Record[] Table { get => table; }
+        /// <exception cref="KeyNotFoundException"></exception>
+        public List<int> this[string key]
+        {
+            get {
+                if (ElementAtKey(key, out List<int> indexes))
+                    return indexes;
+                else
+                    throw new KeyNotFoundException("Указанного ключа не существует");
+            }
+        }
 
-        private Record[] table;
+        ///<summary>Получение всех имеющихся ключей в хеш-таблице</summary> 
+        public string[] Keys
+        {
+            get
+            {
+                List<string> keys = new List<string>(50);
+                foreach (var pair in table)
+                {
+                    if (pair.Key == false)
+                        continue;
+
+                    if (pair.Value != null)
+                        keys.Add(pair.Value.key);
+                }
+                return keys.ToArray();
+            }
+        }
+
+        //true - ключ по указанному индексу существует или был удален, false - ключа не существовало
+        private KeyValuePair<bool, Record>[] table;
 
         /// <summary>Значение ключа в хеш-таблице</summary>
         [Serializable]
-        public class Record
+        private class Record
         {
             public string key;
-            /// <summary>true - элемент в наличие, false - запись пуста</summary>
-            public bool isExist;
 
             //не доступен для замены ссылки
             public readonly List<int> indexes;
 
-            internal Record(string key, bool existing, int lineIndex = -1)
+            internal Record(string key, int lineIndex = -1)
             {
                 this.key = key;
-                isExist = existing;
                 indexes = new List<int>();
 
                 //если не равен -1, то добавляем в список
@@ -38,11 +64,10 @@ namespace HashTableCreator
             }
         }
 
-        public HashTable()
-        {
-            this.indexesOfLines = new List<int>();
-            this.table = new Record[59];
-        }
+        public HashTable() { }
+
+        //хранит индексы начала строк
+        private List<int> indexesOfLines;
 
         /// <summary>
         /// Индексирование записей, путем поиска порядкового номера первого символа в каждой записи
@@ -50,6 +75,8 @@ namespace HashTableCreator
         /// <param name="path">путь к файлу</param>
         private void IndexRecords(string path)
         {
+            indexesOfLines = new List<int>();
+
             FileStream file = new FileStream(path, FileMode.Open);
             //здесь будут храниться начало строк
             indexesOfLines = new List<int>();
@@ -89,17 +116,18 @@ namespace HashTableCreator
             file.Close();
         }
 
-        //хранит индексы начала строк
-        [NonSerialized]
-        private List<int> indexesOfLines;
+        //размер хеш-таблицы
+        private int tableLength = 59;
 
         /// <summary>
-        /// индексирование списка в каждой записи
+        /// индексирование списка в каждой записи. Генерация хеш-таблицы
         /// </summary>
         public void CreateHashTable(string path)
         {
             //индексируем строки в файле
             IndexRecords(path);
+
+            table = new KeyValuePair<bool, Record>[tableLength];
 
             //известно, что необходимый список начнется после достижения 4-го разделителя |
             char separator = '|';
@@ -143,7 +171,7 @@ namespace HashTableCreator
 
                 //заполяем хеш-таблицу имеющимися значениями из поля со списком
                 foreach (string element in list)
-                    KeyHashTable(element, indexesOfLines[i]); //работает
+                    CreateKeyHashTable(element, indexesOfLines[i]); //работает
 
             }
             file.Close();
@@ -152,7 +180,7 @@ namespace HashTableCreator
         private char[] chars = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя ".ToCharArray();
 
         //добавляем новый ключ в хеш-таблицу
-        private void KeyHashTable(string key, int lineIndex)
+        private void CreateKeyHashTable(string key, int lineIndex)
         {
             int recordPos = 0;
             foreach (char c in key)
@@ -164,16 +192,17 @@ namespace HashTableCreator
             {
                 //высчитываем действительную позицию элемента в хеш-таблице
                 recordPos = (recordPos + collision) % table.Length;
-                //если ячейка свободна
-                if (table[recordPos] == null)
+                //если в текущей ячейке не существовало ключа
+                if (table[recordPos].Key == false)
                 {
-                    table[recordPos] = new Record(key, true, lineIndex);
+                    Record newRecord = new Record(key, lineIndex);
+                    table[recordPos] = new KeyValuePair<bool, Record>(true, newRecord);
                     break;
                 }
                 //если текущий ключ в хеш-таблице уже есть, то просто добавляем новый элемент в список текущей записи
-                else if (table[recordPos] != null && table[recordPos].key == key)
+                else if (table[recordPos].Key == true && table[recordPos].Value.key == key)
                 {
-                    table[recordPos].indexes.Add(lineIndex);
+                    table[recordPos].Value.indexes.Add(lineIndex);
                     break;
                 }
 
@@ -182,8 +211,75 @@ namespace HashTableCreator
             }
         }
 
+        /// <summary>
+        /// Поиск информации по ключу. Функционал аналогичен индексатору
+        /// </summary>
+        /// <param name="key">ключ</param>
+        /// <param name="indexes">массив индексов, где индекс - первый символ строки, в которой встречается ключ <br/>
+        /// null - если ключ не найден</param>
+        /// <returns>true - ключ найден, иначе false</returns>
+        public bool ElementAtKey(string key, out List<int> indexes)
+        {
+            //потенциальная позиция записи в массиве
+            int recordPos = 0;
+            const int step = 4; //шаг сдвига в случае коллизии
+
+            foreach (char c in key)
+                recordPos += Array.IndexOf(chars, c); //получаем сумму индексов символов
+
+            //шаг, необходимый в случае коллизий
+            int collision = 0;
+            while (true)
+            {
+                //высчитываем действительную позицию элемента в хеш-таблице
+                recordPos = (recordPos + collision) % table.Length;
+
+                //если по указанному hash записи не существует или не существовало, то возвращает false 
+                if (table[recordPos].Key == false)
+                {
+                    indexes = null;
+                    return false;
+                }
+
+                //здесь, table[recordPos].Key равен true
+                if (table[recordPos].Value != null && table[recordPos].Value.key == key)
+                {
+                    indexes = table[recordPos].Value.indexes;
+                    return true;
+                }
+
+                //в случае не выполнения условий, двигаемся с шагом
+                collision += step;
+            }
+        }
+
+        /// <summary>
+        /// Преобразование хеш-таблицы в словарь
+        /// </summary>
+        /// <exception cref="ArgumentNullException"/>
+        public Dictionary<string, List<int>> ToDictionary()
+        {
+            if (table == null)
+                throw new ArgumentNullException("Хеш-таблица не заполнена значениями");
+
+            Dictionary<string, List<int>> dictionary = new Dictionary<string, List<int>>(50);
+            foreach (KeyValuePair<bool, Record> pair in table)
+            {
+                if (pair.Key == false)
+                    continue;
+
+                if (pair.Value != null)
+                    dictionary.Add(pair.Value.key, pair.Value.indexes);
+            }
+            return dictionary;
+        }
+
+        /// <exception cref="ArgumentNullException"/>
         public void Serialize(string path)
         {
+            if (table == null)
+                throw new ArgumentNullException("Хеш-таблица не заполнена значениями");
+
             FileStream binaryFile = new FileStream(path, FileMode.OpenOrCreate);
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(binaryFile, table); //сериализуем хеш-таблицу
@@ -194,7 +290,7 @@ namespace HashTableCreator
         {
             FileStream binaryFile = new FileStream(path, FileMode.Open);
             BinaryFormatter bf = new BinaryFormatter();
-            table = (Record[])bf.Deserialize(binaryFile);
+            table = (KeyValuePair<bool, Record>[])bf.Deserialize(binaryFile);
             binaryFile.Close();
         }
     }
